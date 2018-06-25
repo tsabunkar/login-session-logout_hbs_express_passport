@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const hbs = require('hbs')
 
 const session = require('express-session');
 const passport = require('passport');
@@ -29,6 +29,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+hbs.registerPartials(path.join(__dirname + '/views/partials'))
 
 app.use(logger('dev'));//morgan's logger
 app.use(express.json());
@@ -95,5 +96,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(3000);
 
 module.exports = app;

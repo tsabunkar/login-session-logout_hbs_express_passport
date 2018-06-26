@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const bcryptjs = require('bcryptjs')
 
 mongoose.Promise = global.Promise;
 // const url = process.env.MONGODB_URI;
@@ -32,6 +33,16 @@ var userSchema = mongoose.Schema({
 
 var User = mongoose.model('user_local_collec', userSchema);
 
+var createUser = (newUserObj, callback) => {
+    bcryptjs.genSalt(10, (err, salt) => {
+        bcryptjs.hash(newUserObj.password, salt, (err, hash) => {
+            newUserObj.password = hash;
+            newUserObj.save(callback);
+        });
+    });
+
+}
 module.exports = {
-    User
+    User,
+    createUser
 }

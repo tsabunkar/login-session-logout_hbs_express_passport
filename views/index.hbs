@@ -18,8 +18,14 @@
 
 <body>
 
-    {{>header}}
-{{messages}}
+    {{>header}} 
+    {{!-- if flash msg is triggered then this messages value will be populated --}}
+    
+    {{#if messages}}
+    <div class="alert alert-success">
+        <strong>Success!</strong>{{{messages}}}
+    </div>
+    {{/if}}
 
     <h1>{{title}}</h1>
     <p>Welcome to {{title}}</p>

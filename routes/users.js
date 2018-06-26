@@ -77,14 +77,16 @@ router.post('/register', upload.single('fileUploadId'), function (req, res, next
       profileImage: profileImage
     })
 
-    newUser.save((err, userObj) => {
+    createUser(newUser, (err, userObj)=>{
       if (err) throw err
       console.log(userObj);
     })
-//once document is saved in saved in the collection, before redirecting to home page
-//show some message to end-client
-    req.flash('success', 'You are now registered, can login now')
-
+  /*   newUser.save((err, userObj) => {
+     
+    }) */
+    //once document is saved in saved in the collection, before redirecting to home page
+    //show some message to end-client
+    req.flash('success', 'You are now registered, can login now');
     res.location('/');
     res.redirect('/'); //redirect to home page
 

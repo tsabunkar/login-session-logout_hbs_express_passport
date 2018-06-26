@@ -38,7 +38,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
 //middleware for doing session's using ->(express-session, 3rd party libr)
 app.use(session({
   secret: 'secret',
@@ -70,7 +69,7 @@ app.use(expressValidator({
 }));
 
 //middleware for messages(showing u have logged in successfully and u have logout popups) using -> (connect-flash , 3rd party module)
-app.use(require('connect-flash')());
+app.use(flash());
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();

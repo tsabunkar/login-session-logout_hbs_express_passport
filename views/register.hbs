@@ -28,12 +28,9 @@
         <p class="text-center">Want to know more about author?
             <a href="https://boiling-cliffs-31406.herokuapp.com/"> SabunkarTejas.com</a>
         </p>
-        <hr> 
-        {{#if errors}} 
-        {{#each errors}}
+        <hr> {{#if errors}} {{#each errors}}
         <div class="alert alert-danger">{{this.msg}}</div>
-        {{/each}} 
-        {{/if}}
+        {{/each}} {{/if}}
         <div class="card bg-light">
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <h4 class="card-title mt-3 text-center">Create Account</h4>
@@ -96,8 +93,8 @@
                                 <i class="fa fa-building"></i>
                             </span>
                         </div>
-                        <select class="form-control">
-                            <option selected="jobSelectedId"> Select job type</option>
+                        <select class="form-control" name="jobSelectedId">
+                            <option selected=""> Select job type</option>
                             <option>IT Profession</option>
                             <option>Designer</option>
                             <option>Manager</option>

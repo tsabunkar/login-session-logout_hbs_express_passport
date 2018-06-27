@@ -9,7 +9,7 @@ const url = 'mongodb://localhost:27017/mymongodb';
 mongoose.connect(url);
 //for production env, we are using the mongodb uri as -> process.env.MONGODB_URI
 
-var userSchema = mongoose.Schema({
+var UserSchema = mongoose.Schema({
     username: {
         type: String
     },
@@ -31,7 +31,18 @@ var userSchema = mongoose.Schema({
     }
 });
 
-var User = mongoose.model('user_local_collec', userSchema);
+UserSchema.methods.isValidPassword = async function (passwordEntered) {
+    try {
+        hashedPasswordFromDb = this.password; //bcoz password saved in the DB are in hashed format
+        let PromiseObj = await bcryptjs.compare(passwordEntered, hashedPasswordFromDb)
+        return PromiseObj; //promiseObj<boolean> is boolean type (i.e- true if passwordEntere == hashedPasswordFromDb )
+    } catch (err) {
+        throw new Error(err);
+    }
+
+}
+
+var User = mongoose.model('user_local_collec', UserSchema);
 
 var createUser = (newUserObj, callback) => {
     bcryptjs.genSalt(10, (err, salt) => {
@@ -42,7 +53,32 @@ var createUser = (newUserObj, callback) => {
     });
 
 }
+
+var getUserById = (userId, callback) =>{
+    User.findById(userId,callback);
+}
+var getUserByEmailId = (email, callback) =>{
+    var query = {email : email}
+    User.findOne(query, callback)
+}
+/* var verifyPassword = (Enteredpassword, hashedPassword, callback) =>{
+    bcryptjs.compare(Enteredpassword, hashedPassword, (err , isMatch)=>{
+        callback(null,isMatch)
+    }); 
+} */
+/* var verifyPassword = (Enteredpassword,hashedPassword) =>{
+    if(bcryptjs.compare(Enteredpassword, hashedPassword) ){
+        return true
+    }
+    else{
+        return false
+    }
+} */
+
 module.exports = {
     User,
-    createUser
+    createUser,
+    getUserById,
+    getUserByEmailId,
+    // verifyPassword
 }

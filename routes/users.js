@@ -85,9 +85,10 @@ passport.deserializeUser(function (id, done) {
 
 //using localStragey of passport to authorize
 passport.use(new LocalStrategy({
-  usernameField: "email" //by default localStartegy will authenticate username and password, but instead of username we want to authenticate email property, soo need to specifiy
+  usernameField: "email",//by default localStartegy will authenticate username and password, but instead of username we want to authenticate email property, soo need to specifiy
   // passwordField : "password"
-}, async (email, password, done) => {
+  passReqToCallback : true
+}, async (req, email, password, done) => {
 
   console.log(email);
   console.log(password);
@@ -97,16 +98,13 @@ passport.use(new LocalStrategy({
     const userObj = await User.findOne({ //NOTE : It was returning null object -> Found the solution by giving the second argum
       "email": email //check this property in user.js inside Model Schema defined
     }, function (err, obj) {
-      console.log('fetching the obj from the entered emailID');
       console.log(obj);
     })
 
     //if not handle it, (invalid emailId)
     if (!userObj) {
-      // req.flash('failuremessage', 'Unknown emailId');
-      done(null, false, {
-        failuremessage: 'Unknown emailId'
-      })
+       req.flash('failuremessage', '(Unknown emailId) ');
+      done(null, false)
       return
     }
 
@@ -115,10 +113,8 @@ passport.use(new LocalStrategy({
 
     //if not handle it, (invalid password)
     if (!isMatched) { //password didn't match scenario
-      // req.flash('failuremessage', 'Unknown password');
-      done(null, false, {
-        failuremessage: 'Invalid Password'
-      })
+       req.flash('failuremessage', '(Invalid password)');
+      done(null, false)
       return
     }
 

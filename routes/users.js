@@ -10,9 +10,7 @@ var upload = multer({
 var {
   User,
   createUser,
-  getUserById,
-  getUserByEmailId,
-  verifyPassword,
+  getUserById
 
 } = require('../models/user');
 
@@ -24,14 +22,16 @@ router.get('/', function (req, res, next) {
 
 //localhost:3000/users/register
 router.get('/register', function (req, res, next) {
-  res.render('register.hbs')
+  res.render('register.hbs', {
+    emailalreadyexistmessage: req.flash('emailexistmessage')
+  })
 });
 
 //localhost:3000/users/login
 router.get('/login', function (req, res, next) {
   res.render('login.hbs', {
     loginmessages: req.flash('failuremessage'),
-    logoutmessages : req.flash('success')
+    logoutmessages: req.flash('successmessage')
   })
 });
 
@@ -47,7 +47,7 @@ router.get('/login', function (req, res, next) {
   }),
   function (req, res) {
     console.log('Success');
-    req.flash('success', 'Your r now logged in successfully !!')
+    req.flash('messages', 'Your r now logged in successfully !!')
     res.redirect('/');
   }); */
 
@@ -65,8 +65,8 @@ router.post('/login', function (req, res, next) {
       if (err) {
         return next(err);
       }
-      req.flash('myFlashMessages', 'Your r now logged in successfully !!')
-      res.redirect('/');
+      req.flash('messages', 'Your r now logged in successfully !!')//this message is not prinitng
+      res.redirect('/');//redirect to home page
       return
     });
   })(req, res, next);
@@ -88,7 +88,7 @@ passport.deserializeUser(function (id, done) {
 passport.use(new LocalStrategy({
   usernameField: "email",//by default localStartegy will authenticate username and password, but instead of username we want to authenticate email property, soo need to specifiy
   // passwordField : "password"
-  passReqToCallback : true
+  passReqToCallback: true
 }, async (req, email, password, done) => {
 
   console.log(email);
@@ -104,7 +104,7 @@ passport.use(new LocalStrategy({
 
     //if not handle it, (invalid emailId)
     if (!userObj) {
-       req.flash('failuremessage', '(Unknown emailId) ');
+      req.flash('failuremessage', '(Unknown emailId) ');
       done(null, false)
       return
     }
@@ -114,7 +114,7 @@ passport.use(new LocalStrategy({
 
     //if not handle it, (invalid password)
     if (!isMatched) { //password didn't match scenario
-       req.flash('failuremessage', '(Invalid password)');
+      req.flash('failuremessage', '(Invalid password)');
       done(null, false)
       return
     }
@@ -173,35 +173,62 @@ router.post('/register', upload.single('fileUploadId'), function (req, res, next
     })
   } else {
     console.log('No errors occured');
-    var newUser = new User({
-      username: nameId,
+    var promiseObj = User.findOne({
       email: emailId,
-      mobile: mobileId,
-      profileSelected: jobSelectedId,
-      password: passwordId,
-      profileImage: profileImage
     })
 
-    createUser(newUser, (err, userObj) => {
-      if (err) throw err
-      console.log(userObj);
-    })
-    /*   newUser.save((err, userObj) => {
-       
-      }) */
-    //once document is saved in saved in the collection, before redirecting to home page
-    //show some message to end-client
-    req.flash('myFlashMessages', 'You are now registered, can login now');
-    res.location('/');
-    res.redirect('/'); //redirect to home page
+    promiseObj.then((userObjExist) => {
+
+      // console.log(userObjExist);
+      if (userObjExist) {
+        req.flash('emailexistmessage', 'EmailId already exist, please register with different email');
+        res.location('/users/register');
+        res.redirect('/users/register');
+        return
+      }
+      else {
+
+        var newUser = new User({
+          username: nameId,
+          email: emailId,
+          mobile: mobileId,
+          profileSelected: jobSelectedId,
+          password: passwordId,
+          profileImage: profileImage
+        })
+
+        createUser(newUser, (err, userObj) => {
+          if (err) throw err
+          console.log(userObj);
+        })
+        /*   newUser.save((err, userObj) => {
+           
+          }) */
+        //once document is saved in saved in the collection, before redirecting to home page
+        //show some message to end-client
+        req.flash('successmessage', 'You are now registered, can login now');
+        res.location('/users/login');
+        res.redirect('/users/login'); //redirect to home page
+        return
+
+      }
+
+
+    }).catch((err) => {
+      console.log(err);
+    });
+
+    // console.log(user_ObjectExist);
+
+
 
   }
 });
 
 //http://localhost:3000/users/logout
-router.get('/logout', (req,res) =>{
+router.get('/logout', (req, res) => {
   req.logout();//logout() is builtin method for logout
-  req.flash('success', 'You have logged-out successfully');
+  req.flash('successmessage', 'You have logged-out successfully');
   res.redirect('/users/login')
 })
 

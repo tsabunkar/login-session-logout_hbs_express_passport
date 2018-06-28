@@ -57,28 +57,15 @@ var createUser = (newUserObj, callback) => {
 var getUserById = (userId, callback) =>{
     User.findById(userId,callback);
 }
-var getUserByEmailId = (email, callback) =>{
+/* var getUserByEmailId = (email, callback) =>{
     var query = {email : email}
     User.findOne(query, callback)
-}
-/* var verifyPassword = (Enteredpassword, hashedPassword, callback) =>{
-    bcryptjs.compare(Enteredpassword, hashedPassword, (err , isMatch)=>{
-        callback(null,isMatch)
-    }); 
 } */
-/* var verifyPassword = (Enteredpassword,hashedPassword) =>{
-    if(bcryptjs.compare(Enteredpassword, hashedPassword) ){
-        return true
-    }
-    else{
-        return false
-    }
-} */
+
 
 module.exports = {
     User,
     createUser,
     getUserById,
-    getUserByEmailId,
-    // verifyPassword
+    // getUserByEmailId
 }

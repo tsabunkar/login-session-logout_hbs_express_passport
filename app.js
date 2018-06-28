@@ -32,7 +32,7 @@ app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname + '/views/partials'))
 hbs.localsAsTemplateData(app);//this is for Exposing locals variable as template data
 //when we use app.locals & res.locals -> to set the global variable which can be used in Template engine (Handlebars)
-app.locals.myName = 'Tejas Sabunkar Creations';
+app.locals.myName = '@Tejas Sabunkar Creations';
 
 app.use(logger('dev'));//morgan's logger
 app.use(express.json());
@@ -74,7 +74,9 @@ app.use(expressValidator({
 //middleware for messages(showing u have logged in successfully and u have logout popups) using -> (connect-flash , 3rd party module)
 app.use(flash());
 app.use(function (req, res, next) {
-  res.locals.myFlashMessages = require('express-messages')(req, res); //res.locals.messages -> this way we can create a global variable called (messages)
+  res.locals.messages = require('express-messages')(req, res); //res.locals.messages -> this way we can create a global variable called (messages)
+ /* console.log(res.locals.messages());
+ console.log(res.locals); */
   next();
 });
 

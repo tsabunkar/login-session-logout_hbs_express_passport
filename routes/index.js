@@ -5,8 +5,7 @@ var router = express.Router();
 router.get('/', ensureAuthenticated ,function (req, res, next) {
   
   res.render('index', {
-    title: 'Personal Home Loan',
-    // messages: req.flash('success')
+    title: 'Personal Home Loan'
   });
 });
 

@@ -30,6 +30,9 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname + '/views/partials'))
+hbs.localsAsTemplateData(app);//this is for Exposing locals variable as template data
+//when we use app.locals & res.locals -> to set the global variable which can be used in Template engine (Handlebars)
+app.locals.myName = 'Tejas Sabunkar Creations';
 
 app.use(logger('dev'));//morgan's logger
 app.use(express.json());
@@ -71,10 +74,22 @@ app.use(expressValidator({
 //middleware for messages(showing u have logged in successfully and u have logout popups) using -> (connect-flash , 3rd party module)
 app.use(flash());
 app.use(function (req, res, next) {
-  res.locals.messages = require('express-messages')(req, res);
+  res.locals.myFlashMessages = require('express-messages')(req, res); //res.locals.messages -> this way we can create a global variable called (messages)
   next();
 });
 
+//creating a new global variable to hideout login btn when user has logged in
+//and hideout logout btn when user has not loggedin/signin 
+app.get('*', function(req,res,next){//for all pages ->*
+ let userObjectFetched = req.user;
+ if(!userObjectFetched){ //userObjectFetched in undefined or null
+  res.locals.userLoggedInObj =  null ;
+ }
+ else{
+  res.locals.userLoggedInObj = userObjectFetched; //created global varaible-> isUserLoggedIn (it is an object type)
+ }
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

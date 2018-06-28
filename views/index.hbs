@@ -14,16 +14,16 @@
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
+        
 </head>
 
 <body>
-
-    {{>header}} 
+{{myName}}
     {{!-- if flash msg is triggered then this messages value will be populated --}}
     
-    {{#if messages}}
+    {{#if myFlashMessages}}
     <div class="alert alert-success">
-        <strong>Success!</strong>{{{messages}}}
+        <strong>Success!</strong>{{{myFlashMessages}}}
     </div>
     {{/if}}
 
@@ -31,7 +31,6 @@
     <p>Welcome to {{title}}</p>
 
 
-    {{>footer}}
 </body>
 
 </html>

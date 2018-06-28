@@ -30,7 +30,8 @@ router.get('/register', function (req, res, next) {
 //localhost:3000/users/login
 router.get('/login', function (req, res, next) {
   res.render('login.hbs', {
-    loginmessages: req.flash('failuremessage')
+    loginmessages: req.flash('failuremessage'),
+    logoutmessages : req.flash('success')
   })
 });
 
@@ -60,11 +61,11 @@ router.post('/login', function (req, res, next) {
       res.redirect('/users/login');
       return
     }
-    req.logIn(user, function (err) {
+    req.logIn(user, function (err) {// req.logIn() -> logIn() method (builtin method for login)
       if (err) {
         return next(err);
       }
-      req.flash('success', 'Your r now logged in successfully !!')
+      req.flash('myFlashMessages', 'Your r now logged in successfully !!')
       res.redirect('/');
       return
     });
@@ -190,12 +191,19 @@ router.post('/register', upload.single('fileUploadId'), function (req, res, next
       }) */
     //once document is saved in saved in the collection, before redirecting to home page
     //show some message to end-client
-    req.flash('success', 'You are now registered, can login now');
+    req.flash('myFlashMessages', 'You are now registered, can login now');
     res.location('/');
     res.redirect('/'); //redirect to home page
 
   }
 });
+
+//http://localhost:3000/users/logout
+router.get('/logout', (req,res) =>{
+  req.logout();//logout() is builtin method for logout
+  req.flash('success', 'You have logged-out successfully');
+  res.redirect('/users/login')
+})
 
 
 

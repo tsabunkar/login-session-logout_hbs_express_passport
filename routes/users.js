@@ -97,6 +97,7 @@ passport.use(new LocalStrategy({
     const userObj = await User.findOne({ //NOTE : It was returning null object -> Found the solution by giving the second argum
       "email": email //check this property in user.js inside Model Schema defined
     }, function (err, obj) {
+      console.log('fetching the obj from the entered emailID');
       console.log(obj);
     })
 
@@ -118,6 +119,7 @@ passport.use(new LocalStrategy({
       done(null, false, {
         failuremessage: 'Invalid Password'
       })
+      return
     }
 
     //thus success, valid credentials , pass the user object

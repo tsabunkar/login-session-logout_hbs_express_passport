@@ -1,15 +1,9 @@
 var mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs')
 
-mongoose.Promise = global.Promise;
-// const url = process.env.MONGODB_URI;
-const url = 'mongodb://localhost:27017/mymongodb';
+const Schema = mongoose.Schema;
 
-
-mongoose.connect(url);
-//for production env, we are using the mongodb uri as -> process.env.MONGODB_URI
-
-var UserSchema = mongoose.Schema({
+var UserSchema = new Schema({
     username: {
         type: String
     },
@@ -31,6 +25,23 @@ var UserSchema = mongoose.Schema({
     }
 });
 
+UserSchema.pre('save', async function (next) {
+    //not using fat arrow, bcoz using this keyword
+    try {
+
+        //Generate a salt
+        const saltedVal = await bcryptjs.genSalt(10) //10 is the number of rounds
+        //generate a password hashed (salt + hash)
+        const hashedPassword = await bcryptjs.hash(this.password, saltedVal)
+        //Re-assigning hashed version over original plain text password
+        this.password = hashedPassword;
+        next();
+    } catch (err) {
+        next(err)
+    }
+})
+
+
 UserSchema.methods.isValidPassword = async function (passwordEntered) {
     try {
         hashedPasswordFromDb = this.password; //bcoz password saved in the DB are in hashed format
@@ -44,28 +55,14 @@ UserSchema.methods.isValidPassword = async function (passwordEntered) {
 
 var User = mongoose.model('user_local_collec', UserSchema);
 
-var createUser = (newUserObj, callback) => {
-    bcryptjs.genSalt(10, (err, salt) => {
-        bcryptjs.hash(newUserObj.password, salt, (err, hash) => {
-            newUserObj.password = hash;
-            newUserObj.save(callback);
-        });
-    });
 
+var getUserById = (userId, callback) => {
+    User.findById(userId, callback);
 }
-
-var getUserById = (userId, callback) =>{
-    User.findById(userId,callback);
-}
-/* var getUserByEmailId = (email, callback) =>{
-    var query = {email : email}
-    User.findOne(query, callback)
-} */
 
 
 module.exports = {
     User,
-    createUser,
     getUserById,
-    // getUserByEmailId
+
 }

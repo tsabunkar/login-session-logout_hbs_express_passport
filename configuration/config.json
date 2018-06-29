@@ -1,0 +1,22 @@
+{
+    "test": {
+        "PORT": 3000,
+        "MONGODB_URI": "mongodb://localhost:27017/mymongodbtest",
+        "JWT_SECRET": "mySalt123!"
+    },
+    "development": {
+        "PORT": 3000,
+        "MONGODB_URI": "mongodb://localhost:27017/mymongodb",
+        "JWT_SECRET": "mySalt123!",
+        "oauth": {
+            "google": {
+                "clientID": "633736947972-d7fvf30rkr7an1dtl697i7urpv6ua9de.apps.googleusercontent.com",
+                "clientSecret": "h2FpYM70xLEieZ5Ft9mpSVrB"
+            },
+            "facebook": {
+                "clientID": "2067725470182269",
+                "clientSecret": "fd697e8eb0ed559b40dd8b63e47f3f9a"
+            }
+        }
+    }
+}

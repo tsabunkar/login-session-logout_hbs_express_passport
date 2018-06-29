@@ -37,7 +37,7 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// console.log(path.join(__dirname, 'public'));
 
 //middleware for doing session's using ->(express-session, 3rd party libr)
 app.use(session({
@@ -88,15 +88,26 @@ app.get('*', function (req, res, next) { //for all pages ->*
     res.locals.userLoggedInObj = userObjectFetched; //created global varaible-> isUserLoggedIn (it is an object type)
   }
   next();
+
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
+app.use('/', indexRouter); //routing "localhost:3000/" to routes/index.js file
+app.use('/users', usersRouter); //routing "localhost:3000/users" to routes/users.js file
+
+
+//code for redirecting to pagenotfound, if invalid url
 app.use(function (req, res, next) {
-  next(createError(404));
+  let statusCodeVal = res.statusCode;
+
+  if (statusCodeVal <= 200 || statusCodeVal > 200) {
+    //whatever is the invalid url[or irrespective of invalid url] , just convert that url to this -> http://localhost:3000/pagenotfound url
+    res.redirect('http://localhost:3000/pagenotfound')    //this url response is handled in routes/index.js
+  }
+  // next(createError(404));
 });
+
+
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -109,6 +120,6 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-// app.listen(3000);
+app.listen(3000);
 
 module.exports = app;

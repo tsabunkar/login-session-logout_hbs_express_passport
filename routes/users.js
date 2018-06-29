@@ -36,7 +36,7 @@ router.post('/login', passportConfigu.passportAuthenticateLogin)
 
 // action="/users/register" [http://localhost:3000/users/register]
 //body-parse cannot handle file upload, soo we r using 3rd party module called-multer
-router.post('/register', upload.single('fileUploadId'), userController.signUp);
+router.post('/register' || '/register/', upload.single('fileUploadId'), userController.signUp);
 
 //http://localhost:3000/users/logout
 router.get('/logout', userController.signOut)

@@ -26,13 +26,7 @@ var signUp = async (req, res, next) => {
 
 
     //form validators
-    req.checkBody('nameId', 'Name field is required').notEmpty();
-    req.checkBody('emailId', 'Email field is required').notEmpty();
-    req.checkBody('emailId', 'Email is not in valid format').isEmail();
-    req.checkBody('mobileId', 'Mobile field is required').notEmpty();
-    req.checkBody('jobSelectedId', 'Professional dropdown is required').notEmpty();
-    req.checkBody('passwordId', 'Password field is required').notEmpty();
-    req.checkBody('rePasswordId', 'Password do not match').equals(req.body.passwordId);
+    formValidationExpress(req);
 
 
     //check errors
@@ -66,7 +60,7 @@ var signUp = async (req, res, next) => {
             profileImage: profileImage
         })
 
-        await newUser.save();
+        await newUser.save();//before saving this document, pre() method will be executed which will encrypt the password
 
         //once document is saved in saved in the collection, before redirecting to home page
         //show some message to end-client
@@ -89,7 +83,19 @@ var signOut = (req, res) => {
     res.redirect('/users/login')
 }
 
+
+function formValidationExpress(req) {
+    req.checkBody('nameId', 'Name field is required').notEmpty();
+    req.checkBody('emailId', 'Email field is required').notEmpty();
+    req.checkBody('emailId', 'Email is not in valid format').isEmail();
+    req.checkBody('mobileId', 'Mobile field is required').notEmpty();
+    req.checkBody('jobSelectedId', 'Professional dropdown is required').notEmpty();
+    req.checkBody('passwordId', 'Password field is required').notEmpty();
+    req.checkBody('rePasswordId', 'Password do not match').equals(req.body.passwordId);
+}
+
 module.exports = {
     signUp,
     signOut
 }
+

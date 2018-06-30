@@ -8,6 +8,7 @@
         "PORT": 3000,
         "MONGODB_URI": "mongodb://localhost:27017/mymongodb",
         "JWT_SECRET": "mySalt123!",
+        "LOCAL_URL" : "http://localhost:3000/pagenotfound",
         "oauth": {
             "google": {
                 "clientID": "633736947972-d7fvf30rkr7an1dtl697i7urpv6ua9de.apps.googleusercontent.com",

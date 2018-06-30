@@ -23,9 +23,9 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'hbs');
-hbs.registerPartials(path.join(__dirname + '/views/partials'))
+hbs.registerPartials(path.join(__dirname , '../views/partials'))
 hbs.localsAsTemplateData(app); //this is for Exposing locals variable as template data
 //when we use app.locals & res.locals -> to set the global variable which can be used in Template engine (Handlebars)
 app.locals.myName = '@Tejas Sabunkar Creations';
@@ -36,7 +36,8 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(express.static(path.join(__dirname, '../public')));
 // console.log(path.join(__dirname, 'public'));
 
 //middleware for doing session's using ->(express-session, 3rd party libr)
@@ -102,7 +103,7 @@ app.use(function (req, res, next) {
 
   if (statusCodeVal <= 200 || statusCodeVal > 200) {
     //whatever is the invalid url[or irrespective of invalid url] , just convert that url to this -> http://localhost:3000/pagenotfound url
-    res.redirect('http://localhost:3000/pagenotfound')    //this url response is handled in routes/index.js
+    res.redirect(process.env.URL_404)    //this url response is handled in routes/index.js
   }
   // next(createError(404));
 });
@@ -120,6 +121,6 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000);
+// app.listen(3000);
 
 module.exports = app;

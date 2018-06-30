@@ -16,11 +16,10 @@ function ensureAuthenticated(req, res, next) { //ensureAuthenticated() func is c
   }
   res.redirect('/users/login')//user has not logged in soo redirect him to login page :)
 }
-
  //code for handling  pagenotfound ie-> http://localhost:3000/pagenotfound
 router.get('/pagenotfound', function (req, res, next) {
   res.sendFile('pagenotfound.html', {
-    root: path.join(__dirname + '/../public')  // response.sendfile('public/pagenotfound.html');
+    root: path.join(__dirname + '/../../public')  // response.sendfile('public/pagenotfound.html');
   });
 });
 

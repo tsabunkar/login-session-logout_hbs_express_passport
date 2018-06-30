@@ -18,10 +18,15 @@
 </head>
 
 <body>
-    {{>header}}
+
     {{#if loginmessages}}
     <div class="alert alert-danger">
         <strong>Failure!</strong>{{{loginmessages}}}
+    </div>
+    {{/if}}
+    {{#if logoutmessages}}
+    <div class="alert alert-success">
+        <strong>Success!</strong>{{{logoutmessages}}}
     </div>
     {{/if}}
     <div class="text-center">
@@ -43,7 +48,7 @@
             <p class="mt-5 mb-3 text-muted">&copy; 2018-2019</p>
         </form>
     </div>
-    {{>footer}}
+
 </body>
 
 </html>

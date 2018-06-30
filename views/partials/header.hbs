@@ -2,11 +2,11 @@
     <h5 class="my-0 mr-md-auto font-weight-normal">Personal Loan</h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark" href="/">Home</a>
-{{!--         <a class="p-2 text-dark" href="/users/register">Register</a> --}}
-        <a class="p-2 text-dark" href="/users/login">Login</a>
+        {{#if @userLoggedInObj}}
         <a class="p-2 text-dark" href="/users/logout">Logout</a>
+        {{else}}
+        <a class="p-2 text-dark" href="/users/login">Login</a>
+        {{/if}}
     </nav>
     <a class="btn btn-outline-primary" href="/users/register">Sign up</a>
 </div>
-
-

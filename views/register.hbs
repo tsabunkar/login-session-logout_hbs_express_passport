@@ -20,8 +20,6 @@
 </head>
 
 <body>
-    {{>header}}
-
 
     <div class="container">
         <br>
@@ -31,6 +29,9 @@
         <hr> {{#if errors}} {{#each errors}}
         <div class="alert alert-danger">{{this.msg}}</div>
         {{/each}} {{/if}}
+        {{#if emailalreadyexistmessage}}
+         <div class="alert alert-danger">{{emailalreadyexistmessage}}</div>
+         {{/if}}
         <div class="card bg-light">
             <article class="card-body mx-auto" style="max-width: 400px;">
                 <h4 class="card-title mt-3 text-center">Create Account</h4>
@@ -135,7 +136,7 @@
     </div>
     <!--container end.//-->
 
-    {{>footer}}
+
 
 </body>
 
